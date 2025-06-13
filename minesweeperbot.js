@@ -73,8 +73,14 @@ function delay(ms) {
     /^square open[1-8]$/.test(cell.className)
   );
 
+  //   search through open tiles
+  for (const cell of openTiles) {
+    const num = parseInt(cell.className.match(/open(\d)/)[1]);
+    console.log("num", num);
+  }
+
   //   console.log("board", board);
   //   console.log(getBoardBounds(board));
 
-  console.log("openTiles", openTiles);
+  //   console.log("openTiles", openTiles);
 })();
