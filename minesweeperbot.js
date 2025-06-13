@@ -53,5 +53,18 @@ function delay(ms) {
       .filter(Boolean);
   });
 
-  console.log("board", board);
+  //   calculate the max and min number to see how many cells are in the game and what are valid cells to click
+  function getBoardBounds(board) {
+    const xValues = board.map((cell) => cell.x);
+    const yValues = board.map((cell) => cell.y);
+    return {
+      minX: Math.min(...xValues),
+      maxX: Math.max(...xValues),
+      minY: Math.min(...yValues),
+      maxY: Math.max(...yValues),
+    };
+  }
+
+  //   console.log("board", board);
+  console.log(getBoardBounds(board));
 })();
