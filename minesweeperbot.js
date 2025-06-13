@@ -26,12 +26,31 @@ function delay(ms) {
   const board = await page.evaluate(() => {
     // gets the tiles that have an id game and class square
     const cells = Array.from(document.querySelectorAll("#game .square"));
-    return cells.filter((cell) => {
-      // filter and get cells by style
-      const style = window.getComputedStyle(cell);
-      //   only return cells that have a display not = none
-      return style.display !== "none";
-    });
+    return cells
+      .filter((cell) => {
+        // filter and get cells by style
+        const style = window.getComputedStyle(cell);
+        //   only return cells that have a display not = none
+        return style.display !== "none";
+      })
+      .map((cell) => {
+        // create a list aray of all ids of the cells in 1_1 format
+        const id = cell.id;
+        // create a list array of all class names of cells to see what the square is e.g number blank open
+        const className = cell.className;
+
+        // create an array of each id splitting the x and y cowardinate
+        const match = id.match(/^(\d+)_(\d+)$/);
+
+        // check if there is a match it there is set and x and y cowardinate from the 1_1 values otherwise return null
+        if (!match) return null;
+        const x = parseInt(match[1]);
+        const y = parseInt(match[2]);
+        // make sure value is not 0
+        if (x < 1 || y < 1) return null;
+        return { x, y, className };
+      })
+      .filter(Boolean);
   });
 
   console.log("board", board);
