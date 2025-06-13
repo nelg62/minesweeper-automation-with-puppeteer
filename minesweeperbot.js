@@ -65,6 +65,16 @@ function delay(ms) {
     };
   }
 
+  //   destructure get board values of min and max to use
+  const { minX, maxX, minY, maxY } = getBoardBounds(board);
+
+  //   check for open tiles with numbers
+  const openTiles = board.filter((cell) =>
+    /^square open[1-8]$/.test(cell.className)
+  );
+
   //   console.log("board", board);
-  console.log(getBoardBounds(board));
+  //   console.log(getBoardBounds(board));
+
+  console.log("openTiles", openTiles);
 })();
