@@ -1,0 +1,15 @@
+{
+  "name": "minesweeper-automation-with-puppeteer",
+  "version": "1.0.0",
+  "description": "testing puppeteer with JavaScript to try and automate playing minesweeper",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "puppeteer": "^24.10.1"
+  }
+}
