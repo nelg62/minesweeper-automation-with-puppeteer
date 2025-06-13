@@ -1,5 +1,10 @@
 const puppeteer = require("puppeteer");
 
+// function to add delay to minesweeper app to clicks are not instant and do not get banned
+function delay(ms) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
 (async () => {
   // create new browser create new page
   const browser = await puppeteer.launch({ headless: false });
@@ -13,4 +18,15 @@ const puppeteer = require("puppeteer");
 
   //   click the top left square in the game
   await page.click('[id="1_1"]');
+
+  //   add delay
+  await delay(500);
+
+  //   get the board data
+  const board = await page.evaluate(() => {
+    const cells = Array.from(document.querySelectorAll("#game .square"));
+    return cells;
+  });
+
+  console.log("board", board);
 })();
