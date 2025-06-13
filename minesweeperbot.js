@@ -5,6 +5,23 @@ function delay(ms) {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
+// function to find negibors cells of a number cell
+function getAdjacent(x, y, board, minX, maxX, minY, maxY) {
+  return board.filter((cell) => {
+    const dx = Math.abs(cell.x - x);
+    const dy = Math.abs(cell.y - y);
+    return (
+      dx <= 1 &&
+      dy <= 1 &&
+      !(dx === 0 && dy === 0) &&
+      cell.x >= minX &&
+      cell.x <= maxX &&
+      cell.y >= minY &&
+      cell.y <= maxY
+    );
+  });
+}
+
 (async () => {
   // create new browser create new page
   const browser = await puppeteer.launch({ headless: false });
@@ -75,8 +92,21 @@ function delay(ms) {
 
   //   search through open tiles
   for (const cell of openTiles) {
+    // get the number of each of the open cells
     const num = parseInt(cell.className.match(/open(\d)/)[1]);
-    console.log("num", num);
+    // console.log("num", num);
+
+    // find the neighboring cells of the number cells using getAdjacent function
+    const neighbors = getAdjacent(
+      cell.x,
+      cell.y,
+      board,
+      minX,
+      maxX,
+      minY,
+      maxY
+    );
+    console.log("neighbors", neighbors);
   }
 
   //   console.log("board", board);
