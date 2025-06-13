@@ -24,8 +24,14 @@ function delay(ms) {
 
   //   get the board data
   const board = await page.evaluate(() => {
+    // gets the tiles that have an id game and class square
     const cells = Array.from(document.querySelectorAll("#game .square"));
-    return cells;
+    return cells.filter((cell) => {
+      // filter and get cells by style
+      const style = window.getComputedStyle(cell);
+      //   only return cells that have a display not = none
+      return style.display !== "none";
+    });
   });
 
   console.log("board", board);
