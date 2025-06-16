@@ -1,4 +1,6 @@
 const puppeteer = require("puppeteer");
+const path = require("path");
+const { PuppeteerScreenRecorder } = require("puppeteer-screen-recorder");
 
 // function to add delay to minesweeper app to clicks are not instant and do not get banned
 function delay(ms) {
@@ -26,6 +28,14 @@ function getAdjacent(x, y, board, minX, maxX, minY, maxY) {
   // create new browser create new page
   const browser = await puppeteer.launch({ headless: false });
   const page = await browser.newPage();
+
+  // set path for recording with puppateer
+  const outputPath = path.join(__dirname, "minesweeper-run.mp4");
+
+  // set path of recorder video
+  const recorder = new PuppeteerScreenRecorder(page);
+  // start recording game
+  await recorder.start(outputPath);
 
   //   open page to beginner minesweeper
   // await page.goto("https://minesweeperonline.com/#beginner");
@@ -304,6 +314,11 @@ function getAdjacent(x, y, board, minX, maxX, minY, maxY) {
   //   console.log(getBoardBounds(board));
 
   //   console.log("openTiles", openTiles);
+  await delay(1000);
+  // stop recording and close browser
+  await recorder.stop();
+  await browser.close();
 
   console.log("Game completed");
+  console.log("🎥 Game recorded to:", outputPath);
 })();
