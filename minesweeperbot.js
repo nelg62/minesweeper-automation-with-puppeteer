@@ -29,6 +29,8 @@ function getAdjacent(x, y, board, minX, maxX, minY, maxY) {
 
   //   open page to beginner minesweeper
   await page.goto("https://minesweeperonline.com/#beginner");
+  // await page.goto("https://minesweeperonline.com/#intermediate");
+  //   await page.goto("https://minesweeperonline.com/");
 
   //   wait for game to load
   await page.waitForSelector("#game");
@@ -39,74 +41,89 @@ function getAdjacent(x, y, board, minX, maxX, minY, maxY) {
   //   add delay
   await delay(500);
 
-  //   get the board data
-  const board = await page.evaluate(() => {
-    // gets the tiles that have an id game and class square
-    const cells = Array.from(document.querySelectorAll("#game .square"));
-    return cells
-      .filter((cell) => {
-        // filter and get cells by style
-        const style = window.getComputedStyle(cell);
-        //   only return cells that have a display not = none
-        return style.display !== "none";
-      })
-      .map((cell) => {
-        // create a list aray of all ids of the cells in 1_1 format
-        const id = cell.id;
-        // create a list array of all class names of cells to see what the square is e.g number blank open
-        const className = cell.className;
+  //   variable to chack if the game has made progress of not for each loop
+  let madeProgress = true;
 
-        // create an array of each id splitting the x and y cowardinate
-        const match = id.match(/^(\d+)_(\d+)$/);
+  // while loop to keep game playing if progress if being made
+  while (madeProgress) {
+    madeProgress = false;
 
-        // check if there is a match it there is set and x and y cowardinate from the 1_1 values otherwise return null
-        if (!match) return null;
-        const x = parseInt(match[1]);
-        const y = parseInt(match[2]);
-        // make sure value is not 0
-        if (x < 1 || y < 1) return null;
-        return { x, y, className };
-      })
-      .filter(Boolean);
-  });
+    //   get the board data
+    const board = await page.evaluate(() => {
+      // gets the tiles that have an id game and class square
+      const cells = Array.from(document.querySelectorAll("#game .square"));
+      return cells
+        .filter((cell) => {
+          // filter and get cells by style
+          const style = window.getComputedStyle(cell);
+          //   only return cells that have a display not = none
+          return style.display !== "none";
+        })
+        .map((cell) => {
+          // create a list aray of all ids of the cells in 1_1 format
+          const id = cell.id;
+          // create a list array of all class names of cells to see what the square is e.g number blank open
+          const className = cell.className;
 
-  //   calculate the max and min number to see how many cells are in the game and what are valid cells to click
-  function getBoardBounds(board) {
-    const xValues = board.map((cell) => cell.x);
-    const yValues = board.map((cell) => cell.y);
-    return {
-      minX: Math.min(...xValues),
-      maxX: Math.max(...xValues),
-      minY: Math.min(...yValues),
-      maxY: Math.max(...yValues),
-    };
-  }
+          // create an array of each id splitting the x and y cowardinate
+          const match = id.match(/^(\d+)_(\d+)$/);
 
-  //   destructure get board values of min and max to use
-  const { minX, maxX, minY, maxY } = getBoardBounds(board);
+          // check if there is a match it there is set and x and y cowardinate from the 1_1 values otherwise return null
+          if (!match) return null;
+          const x = parseInt(match[1]);
+          const y = parseInt(match[2]);
+          // make sure value is not 0
+          if (x < 1 || y < 1) return null;
+          return { x, y, className };
+        })
+        .filter(Boolean);
+    });
 
-  //   check for open tiles with numbers
-  const openTiles = board.filter((cell) =>
-    /^square open[1-8]$/.test(cell.className)
-  );
+    //   calculate the max and min number to see how many cells are in the game and what are valid cells to click
+    function getBoardBounds(board) {
+      const xValues = board.map((cell) => cell.x);
+      const yValues = board.map((cell) => cell.y);
+      return {
+        minX: Math.min(...xValues),
+        maxX: Math.max(...xValues),
+        minY: Math.min(...yValues),
+        maxY: Math.max(...yValues),
+      };
+    }
 
-  //   search through open tiles
-  for (const cell of openTiles) {
-    // get the number of each of the open cells
-    const num = parseInt(cell.className.match(/open(\d)/)[1]);
-    // console.log("num", num);
+    //   destructure get board values of min and max to use
+    const { minX, maxX, minY, maxY } = getBoardBounds(board);
 
-    // find the neighboring cells of the number cells using getAdjacent function
-    const neighbors = getAdjacent(
-      cell.x,
-      cell.y,
-      board,
-      minX,
-      maxX,
-      minY,
-      maxY
+    //   check for open tiles with numbers
+    const openTiles = board.filter((cell) =>
+      /^square open[1-8]$/.test(cell.className)
     );
-    console.log("neighbors", neighbors);
+
+    //   search through open tiles
+    for (const cell of openTiles) {
+      // get the number of each of the open cells
+      const num = parseInt(cell.className.match(/open(\d)/)[1]);
+      // console.log("num", num);
+
+      // find the neighboring cells of the number cells using getAdjacent function
+      const neighbors = getAdjacent(
+        cell.x,
+        cell.y,
+        board,
+        minX,
+        maxX,
+        minY,
+        maxY
+      );
+      // console.log("neighbors", neighbors);
+
+      // get list of blank sqaure neighbors
+      const blankNeighbors = neighbors.filter(
+        (n) => n.className === "square blank"
+      );
+
+      console.log("blankNeighbors", blankNeighbors);
+    }
   }
 
   //   console.log("board", board);
