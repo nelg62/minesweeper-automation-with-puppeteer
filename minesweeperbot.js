@@ -51,6 +51,26 @@ function getAdjacent(x, y, board, minX, maxX, minY, maxY) {
     // create a set to store any flagged squares to stop flagging and unflaggign the same square
     const newlyFlagged = new Set();
 
+    // set the game status and check for win and lose conditions
+    const gameStatus = await page.evaluate(() => {
+      const face = document.querySelector("#face");
+      return face?.className || "";
+    });
+
+    // console.log("gameStatus", gameStatus);
+
+    // cehck if game is lost
+    if (gameStatus.includes("facedead")) {
+      console.log("Game over - bot hit a mine");
+      break;
+    }
+
+    // check is game is won
+    if (gameStatus.includes("facewin")) {
+      console.log("Game won - congratulations");
+      break;
+    }
+
     //   get the board data
     const board = await page.evaluate(() => {
       // gets the tiles that have an id game and class square
