@@ -30,7 +30,7 @@ function getAdjacent(x, y, board, minX, maxX, minY, maxY) {
   const page = await browser.newPage();
 
   // set path for recording with puppateer
-  const outputPath = path.join(__dirname, "minesweeper-run.mp4");
+  const outputPath = path.join(__dirname, "recordings/minesweeper-run.mp4");
 
   // set path of recorder video
   const recorder = new PuppeteerScreenRecorder(page);
