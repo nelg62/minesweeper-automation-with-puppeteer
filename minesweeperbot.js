@@ -48,6 +48,9 @@ function getAdjacent(x, y, board, minX, maxX, minY, maxY) {
   while (madeProgress) {
     madeProgress = false;
 
+    // create a set to store any flagged squares to stop flagging and unflaggign the same square
+    const newlyFlagged = new Set();
+
     //   get the board data
     const board = await page.evaluate(() => {
       // gets the tiles that have an id game and class square
@@ -94,6 +97,11 @@ function getAdjacent(x, y, board, minX, maxX, minY, maxY) {
     //   destructure get board values of min and max to use
     const { minX, maxX, minY, maxY } = getBoardBounds(board);
 
+    // function to check if a click is in bounds of the game board as sometimes sas trying to click and unavailable number
+    function isInBounds(x, y, minX, maxX, minY, maxY) {
+      return x >= minX && x <= maxX && y >= minY && y <= maxY;
+    }
+
     //   check for open tiles with numbers
     const openTiles = board.filter((cell) =>
       /^square open[1-8]$/.test(cell.className)
@@ -117,12 +125,55 @@ function getAdjacent(x, y, board, minX, maxX, minY, maxY) {
       );
       // console.log("neighbors", neighbors);
 
+      // check if square has been flagged
+      const flaggedNeighbors = neighbors.filter(
+        (n) => n.className === "square bombflagged"
+      );
+
+      // console.log("flaggedNeighbors",flaggedNeighbors);
+
       // get list of blank sqaure neighbors
       const blankNeighbors = neighbors.filter(
         (n) => n.className === "square blank"
       );
 
-      console.log("blankNeighbors", blankNeighbors);
+      // console.log("blankNeighbors", blankNeighbors);
+
+      // check if blank squares is more then 0 and if they are equal to the number of bombs and if already flagged add the bomb flag and compare
+      if (
+        blankNeighbors.length > 0 &&
+        flaggedNeighbors.length + blankNeighbors.length === num
+      ) {
+        // get x and y cowardinates of the bombs once found then right click to flag
+        for (const bombTile of blankNeighbors) {
+          // get cowardinates of x and y
+          const key = `${bombTile.x}_${bombTile.y}`;
+          // find if a neigbor sqaure is already flagged so it is not unflagged
+          const isAlreadyFlagged = board.find(
+            (c) =>
+              c.x === bombTile.x &&
+              c.y === bombTile.y &&
+              c.className === "square bombflagged"
+          );
+
+          // check if the tile is in bounds to click
+          if (
+            isInBounds(bombTile.x, bombTile.y, minX, maxX, minY, maxY) &&
+            !isAlreadyFlagged &&
+            !newlyFlagged.has(key)
+          ) {
+            console.log(`Flagged bomb at: ${bombTile.x}, ${bombTile.y}`);
+            // await cell with x and y cowardinate and then right click to place flag
+            await page.click(`[id="${bombTile.x}_${bombTile.y}"]`, {
+              button: "right",
+            });
+            // add the cowardinate to the set
+            newlyFlagged.add(key);
+            await delay(300);
+            madeProgress = true;
+          }
+        }
+      }
     }
   }
 
