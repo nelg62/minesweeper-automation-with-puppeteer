@@ -174,6 +174,19 @@ function getAdjacent(x, y, board, minX, maxX, minY, maxY) {
           }
         }
       }
+
+      // check and see if tile is safe to click and then click tile
+      if (flaggedNeighbors.length === num && blankNeighbors.length > 0) {
+        for (const safeTiles of blankNeighbors) {
+          // check if the tiles sorted is in bounds to click
+          if (isInBounds(safeTiles.x, safeTiles.y, minX, maxX, minY, maxY)) {
+            console.log(`Safe to click at: ${safeTiles.x}, ${safeTiles.y}`);
+            await page.click(`[id="${safeTiles.x}_${safeTiles.y}"]`);
+            await delay(300);
+            madeProgress = true;
+          }
+        }
+      }
     }
   }
 
