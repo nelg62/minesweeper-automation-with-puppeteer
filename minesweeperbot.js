@@ -28,9 +28,11 @@ function getAdjacent(x, y, board, minX, maxX, minY, maxY) {
   const page = await browser.newPage();
 
   //   open page to beginner minesweeper
-  await page.goto("https://minesweeperonline.com/#beginner");
+  // await page.goto("https://minesweeperonline.com/#beginner");
+  // open page to intermediate minesweeper
   // await page.goto("https://minesweeperonline.com/#intermediate");
-  //   await page.goto("https://minesweeperonline.com/");
+  // open game to large minesweeper
+  await page.goto("https://minesweeperonline.com/");
 
   //   wait for game to load
   await page.waitForSelector("#game");
@@ -208,10 +210,100 @@ function getAdjacent(x, y, board, minX, maxX, minY, maxY) {
         }
       }
     }
+
+    // if game gets stuck and no logical moves try and guess
+    if (!madeProgress) {
+      // create a list of all probablile cells to click
+      const probabilities = new Map();
+
+      for (const cell of openTiles) {
+        //  goes through all tiles with numbers and returns the number of the tile so open1 with be 1
+        const num = parseInt(cell.className.match(/open(\d)/)[1]);
+        // console.log("num", num);
+        // get the neghtbors of that tile
+        const neighbors = getAdjacent(
+          cell.x,
+          cell.y,
+          board,
+          minX,
+          maxX,
+          minY,
+          maxY
+        );
+
+        // get blank neighbor squares
+        const blankNeighbors = neighbors.filter(
+          (n) => n.className === "square blank"
+        );
+        // get flagged neighbor squares
+        const flaggedNeighbors = neighbors.filter(
+          (n) => n.className === "square bombflagged"
+        );
+
+        // check how many bombs there are to flag for the numbers showing
+        const bombsLeft = num - flaggedNeighbors.length;
+
+        // add the tiles into the probabilities set
+        if (bombsLeft > 0 && blankNeighbors.length > 0) {
+          const prob = bombsLeft / blankNeighbors.length;
+          for (const tile of blankNeighbors) {
+            const key = `${tile.x}_${tile.y}`;
+            const existing = probabilities.get(key);
+            if (existing === undefined || prob < existing) {
+              probabilities.set(key, prob);
+            }
+          }
+        }
+      }
+
+      // use probabilities and use the highest number for the click as it is the safest
+      if (probabilities.size > 0) {
+        // sort probabilites highest to lowest
+        const sorted = Array.from(probabilities.entries()).sort(
+          (a, b) => a[1] - b[1]
+        );
+        const [safestKey] = sorted[0];
+        const [x, y] = safestKey.split("_").map(Number);
+        if (isInBounds(x, y, minX, maxX, minY, maxY)) {
+          console.log(
+            `Probabilistic guess at: ${x},${y} with estimated risk: ${sorted[0][1].toFixed(
+              2
+            )}`
+          );
+          await page.click(`[id="${x}_${y}"]`);
+          await delay(300);
+          madeProgress = true;
+        }
+        // if no more logical guesses and cannot guess with probability try a random guess
+      } else {
+        // get list of blank tiles
+        const blankTiles = board.filter(
+          (cell) => cell.className === "square blank"
+        );
+
+        // find a random tile and click it
+        if (blankTiles.length > 0) {
+          const randomTile =
+            blankTiles[Math.floor(Math.random() * blankTiles.length)];
+          console.log(
+            `No logic left guessing at: ${randomTile.x}, ${randomTile.y}`
+          );
+          await page.click(`[id="${randomTile.x}_${randomTile.y}"]`);
+          await delay(300);
+          madeProgress = true;
+          // if no more modes at all can be found just end the program
+        } else {
+          console.log("No logical or probabalistic moves left ending game");
+          break;
+        }
+      }
+    }
   }
 
   //   console.log("board", board);
   //   console.log(getBoardBounds(board));
 
   //   console.log("openTiles", openTiles);
+
+  console.log("Game completed");
 })();
