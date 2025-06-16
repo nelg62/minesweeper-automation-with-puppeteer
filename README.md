@@ -83,7 +83,7 @@ This project uses javascript and Puppeteer to automatically play minesweeper
 <li>Game screen recording </li>
 </ul>
 
-[![Product Name Screen Shot][product-screenshot]](/recordings/minesweeper-run-winninggame.mp4)
+[![Product Name Screen Shot][product-screenshot]](/recordings/minesweeper-run-winninggame.mp4)C:\Users\Glen\Documents\Coding projects\minesweeperautoplay\minesweeper-automation-with-puppeteer\recordings\minesweeper-run-winninggame.mp4
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
