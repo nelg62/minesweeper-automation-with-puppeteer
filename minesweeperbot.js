@@ -51,7 +51,7 @@ function getAdjacent(x, y, board, minX, maxX, minY, maxY) {
   await page.click('[id="1_1"]');
 
   //   add delay
-  await delay(500);
+  // await delay(500);
 
   //   variable to chack if the game has made progress of not for each loop
   let madeProgress = true;
@@ -201,7 +201,7 @@ function getAdjacent(x, y, board, minX, maxX, minY, maxY) {
             });
             // add the cowardinate to the set
             newlyFlagged.add(key);
-            await delay(300);
+            // await delay(300);
             madeProgress = true;
           }
         }
@@ -214,7 +214,7 @@ function getAdjacent(x, y, board, minX, maxX, minY, maxY) {
           if (isInBounds(safeTiles.x, safeTiles.y, minX, maxX, minY, maxY)) {
             console.log(`Safe to click at: ${safeTiles.x}, ${safeTiles.y}`);
             await page.click(`[id="${safeTiles.x}_${safeTiles.y}"]`);
-            await delay(300);
+            // await delay(300);
             madeProgress = true;
           }
         }
@@ -281,7 +281,7 @@ function getAdjacent(x, y, board, minX, maxX, minY, maxY) {
             )}`
           );
           await page.click(`[id="${x}_${y}"]`);
-          await delay(300);
+          // await delay(300);
           madeProgress = true;
         }
         // if no more logical guesses and cannot guess with probability try a random guess
@@ -299,7 +299,7 @@ function getAdjacent(x, y, board, minX, maxX, minY, maxY) {
             `No logic left guessing at: ${randomTile.x}, ${randomTile.y}`
           );
           await page.click(`[id="${randomTile.x}_${randomTile.y}"]`);
-          await delay(300);
+          // await delay(300);
           madeProgress = true;
           // if no more modes at all can be found just end the program
         } else {

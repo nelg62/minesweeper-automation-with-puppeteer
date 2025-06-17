@@ -17,13 +17,13 @@ Learning how to use puppeteer with javascript by creating an app to automaticall
 <br />
 <div align="center">
   <a href="https://github.com/nelg62/minesweeper-automation-with-puppeteer">
-    <img src="images/logo.png" alt="Logo" width="80" height="80">
+    <img align="center" src="images/Minesweeper_2005.webp" alt="Logo" width="80" height="80">
   </a>
 
 <h3 align="center">Minesweeper automation with puppeteer</h3>
 
   <p align="center">
-I wanted to experiment with an automation tool and revisit a project I had previously worked on automating Minesweeper. When I first attempted this, I used Power Automate early in my coding journey. At the time, I didn’t know much about programming or automation, but I still managed to make it work. That said, it was extremely slow—one game could take almost a whole day to complete!
+I wanted to experiment with an automation tool and revisit a project I had previously worked on automating Minesweeper. When I first attempted this, I used Power Automate early in my coding journey. At the time, I didn’t know much about programming or automation, but I still managed to make it work. That said, it was extremely slow one game could take almost a whole day to complete!
 
 This time, I decided to give it another shot using a tool called Puppeteer, which works with JavaScript a language I'm now more comfortable with. Although Puppeteer is often used with Python too, I’m still learning that language. I definitely plan to explore Python based automation projects in the future.
 
@@ -247,7 +247,7 @@ Project Link: [https://github.com/nelg62/minesweeper-automation-with-puppeteer](
 [license-url]: https://github.com/nelg62/minesweeper-automation-with-puppeteer/blob/master/LICENSE.txt
 [linkedin-shield]: https://img.shields.io/badge/-LinkedIn-black.svg?style=for-the-badge&logo=linkedin&colorB=555
 [linkedin-url]: https://linkedin.com/in/glen-harding-5a1317114
-[product-screenshot]: /recordings/minesweeper-run-winninggame.mp4
+[product-screenshot]: /winningattempts/minesweeper-runtrimm%20(1).gif
 [Next.js]: https://img.shields.io/badge/next.js-000000?style=for-the-badge&logo=nextdotjs&logoColor=white
 [Next-url]: https://nextjs.org/
 [React.js]: https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB
