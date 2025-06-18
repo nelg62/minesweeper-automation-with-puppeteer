@@ -83,7 +83,8 @@ This project uses javascript and Puppeteer to automatically play minesweeper
 <li>Game screen recording </li>
 </ul>
 
-[![Product Name Screen Shot][product-screenshot]](/recordings/minesweeper-run-winninggame.mp4)
+[![Product Name Screen Shot][product-screenshot]](/winningattempts/minesweeper-runtrimm.mp4)
+[![Product Name Screen Shot][product-screenshot2]](/winningattempts/Recording%202025-06-19%20105117winninggame.mp4)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -248,6 +249,7 @@ Project Link: [https://github.com/nelg62/minesweeper-automation-with-puppeteer](
 [linkedin-shield]: https://img.shields.io/badge/-LinkedIn-black.svg?style=for-the-badge&logo=linkedin&colorB=555
 [linkedin-url]: https://linkedin.com/in/glen-harding-5a1317114
 [product-screenshot]: /winningattempts/minesweeper-runtrimm%20(1).gif
+[product-screenshot2]: /winningattempts/Recording%202025-06-19%20105117winninggame.gif
 [Next.js]: https://img.shields.io/badge/next.js-000000?style=for-the-badge&logo=nextdotjs&logoColor=white
 [Next-url]: https://nextjs.org/
 [React.js]: https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB
